@@ -163,7 +163,7 @@ class Jenkins(object):
             response = self.jenkins_open(Request(
                 self.server + CRUMB_URL), add_crumb=False)
             if response:
-                self.crumb = json.loads(response.decode('utf-8'))
+                self.crumb = json.loads(response)
             else:
                 # Don't need crumbs
                 self.crumb = False
@@ -226,7 +226,7 @@ class Jenkins(object):
                 req.add_header('Authorization', self.auth)
             if add_crumb:
                 self.maybe_add_crumb(req)
-            return urlopen(req).read()
+            return urlopen(req).read().decode('utf-8')
         except HTTPError as e:
             # Jenkins's funky authentication means its nigh impossible to
             # distinguish errors.
